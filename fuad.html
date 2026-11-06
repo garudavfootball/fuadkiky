@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HAPPY BIRTHDAY KIKY 🎉💖</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Fredoka & Lilita One / Modak style bold fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Lilita+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- GSAP Animation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: #1DA0D7;
+      min-height: 100vh;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .font-hand {
+      font-family: 'Fredoka', cursive;
+    }
+
+    .font-title {
+      font-family: 'Lilita One', 'Fredoka', cursive;
+      letter-spacing: 1px;
+    }
+
+    /* Floating Heart Background Animation */
+    @keyframes floatHeart {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(0.8);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+      @keyframes floatUpDown {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-12px); /* Mengatur tinggi pantulan naik */
+    }
+  }
+
+  .animate-float {
+    animation: floatUpDown 3s ease-in-out infinite;
+  }
+
+    .bg-heart {
+      position: absolute;
+      color: rgba(255, 255, 255, 0.4);
+      user-select: none;
+      pointer-events: none;
+      animation: floatHeart 7s linear infinite;
+    }
+
+    /* Glow animation for buttons */
+    .btn-terima-glow {
+      box-shadow: 0 8px 25px rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center relative select-none overflow-x-hidden">
+
+  <!-- Background Floating Hearts Canvas Container -->
+  <div id="heart-bg-container" class="fixed inset-0 pointer-events-none overflow-hidden z-0"></div>
+
+  <!-- Audio Element for Romantic Music -->
+  <!-- <audio id="bgm" loop preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-piano-112199.mp3" type="audio/mpeg">
+  </audio> -->
+
+  <!-- Music Toggle Floating Button -->
+  <!-- <button id="music-toggle" onclick="toggleMusic()" class="fixed top-4 right-4 z-50 bg-white/90 hover:bg-white text-pink-500 p-3 rounded-full shadow-lg transition-all transform hover:scale-110 flex items-center justify-center cursor-pointer">
+    <span id="music-icon" class="text-xl">🎵</span>
+  </button> -->
+
+  <!-- MAIN CONTAINER WORKSPACE -->
+<!-- flex-col-reverse membuat Right Panel berada di atas Left Panel pada mobile -->
+<div class="w-ful max-w-4xl bg-[#1DA0D7] rounded-3xl shadow-2xl overflow-hidden flex flex-col-reverse md:flex-row min-h-[2px] my-6 pb-6">
+
+  <!-- LEFT PANEL (BLUE BACKGROUND & TEXT CONTENT) -->
+  <div class="w-full md:w-1/2 p-6 sm:p-10 flex flex-col justify-between relative z-10">
+    <!-- Content Header & Text -->
+    <div>
+      <div class="mb-4 md:mb-0">
+        <img src="logo.png" alt="FUAD & KIKY" class="h-24 sm:h-28 w-auto object-contain drop-shadow-sm ">
+      </div>
+      
+      <div class="mt-4 md:mt-10 space-y-4">
+        <h1 class="font-hand font-bold text-4xl sm:text-5xl text-white tracking-wide leading-tight drop-shadow-md">
+          HAPPY BIRTHDAY<br>KIKY
+        </h1>
+        <p class="text-white text-base sm:text-lg opacity-95 max-w-sm leading-relaxed font-medium">
+          Selamat ulang tahun untukmu yang paling spesial. Kamu suka nggak sama hadiah dari aku ?
+        </p>
+      </div>
+    </div>
+
+    <!-- BUTTON GROUP CONTAINER -->
+    <!-- flex-wrap dan items-center menjaga posisi layout tombol -->
+    <div class="mt-8 mb-4 mx-2 flex flex-wrap items-center gap-4 sm:gap-6 relative min-h-[60px]">
+      
+      <!-- Tombol TERIMA dengan transform-origin-left agar membesar ke arah kiri -->
+     <button id="btn-terima" onclick="acceptGift()" class="px-8 sm:px-10 py-3.5 sm:py-4 bg-[#F8F6E6] hover:bg-white text-[#2B3A4A] font-bold text-base sm:text-lg rounded-full shadow-lg transition-transform duration-200 cursor-pointer uppercase tracking-wider origin-left origin-bottom relative z-30">
+  TERIMA
+</button>
+
+      <!-- Tombol TIDAK -->
+      <button id="btn-tidak" class="px-8 sm:px-10 py-3.5 sm:py-4 bg-[#F47DB0] hover:bg-[#f265a0] text-white font-bold text-base sm:text-lg rounded-full shadow-lg transition-all duration-150 cursor-pointer uppercase tracking-wider relative z-20">
+        TIDAK
+      </button>
+
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL (PINK BACKGROUND & CUTEST HUG ILLUSTRATION) -->
+  <div class="w-full md:w-1/2 bg-[#F4AAB9] p-6 sm:p-10 flex items-center justify-center relative overflow-hidden md:rounded-l-[50px] shadow-inner min-h-[300px] sm:min-h-[360px] md:min-h-full">
+    <div class="relative w-full max-w-md h-full flex items-center justify-center">
+      <img src="ilus.png" alt="Fuad dan Kiky Hug Illustration" class="w-full max-w-[320px] sm:max-w-[420px] h-auto object-contain drop-shadow-xl select-none animate-float">
+    </div>
+  </div>
+
+</div>
+
+  </main>
+
+  <!-- Celebration Birthday Modal (Appears when clicking TERIMA) -->
+  <div id="celebration-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-500">
+    <div class="bg-white rounded-3xl p-6 sm:p-10 max-w-lg w-full text-center shadow-2xl border-4 border-pink-300 relative transform scale-90 transition-transform duration-500 max-h-[90vh] overflow-y-auto">
+      
+      <div class="text-6xl mb-3 animate-bounce">🎂🎉✨</div>
+
+      <h3 class="font-title text-3xl sm:text-4xl text-[#1DA0D7] font-bold mb-2">
+        MAKASIH BANYAK SAYANG! ❤️
+      </h3>
+      <p class="text-pink-500 font-bold text-lg sm:text-xl mb-4 font-hand">Happy Birthday Sayang💖</p>
+
+      <!-- Romantic Image/Illustration Placeholder -->
+      <div class="rounded-2xl overflow-hidden border-4 border-pink-200 shadow-md mb-6 max-h-56 bg-pink-100 flex items-center justify-center">
+        <img src="Ilus.png" alt="Happy Celebration Hug" class="w-full h-full object-cover">
+      </div>
+
+      <p class="text-gray-700 text-base sm:text-lg mb-6 leading-relaxed font-medium">
+        Semoga di usiamu yang baru ini, kamu makin bahagia, sehat selalu, makin sukses, dan selalu bersama aku ya! Love you so much Kiky! 🥰🌸
+      </p>
+
+      <div class="flex flex-col sm:flex-row justify-center gap-3">
+        <!-- <button onclick="shareJoy()" class="px-6 py-3 bg-pink-100 hover:bg-pink-200 text-pink-600 font-bold text-sm sm:text-base rounded-full transition-all flex items-center justify-center gap-2">
+          <span>Bagikan Kebahagiaan 📲</span>
+        </button> -->
+        <button onclick="closeModal()" class="px-8 py-3 bg-gradient-to-r from-[#1DA0D7] to-pink-400 text-white font-bold text-sm sm:text-base rounded-full shadow-md hover:shadow-lg transition-all">
+          Tutup 💕
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Audio Control setup
+    const bgm = document.getElementById('bgm');
+    let isPlaying = false;
+    let rejectCount = 0;
+    let acceptScale = 1;
+
+    function toggleMusic() {
+      const musicIcon = document.getElementById('music-icon');
+      if (isPlaying) {
+        bgm.pause();
+        musicIcon.textContent = '🎵';
+        isPlaying = false;
+      } else {
+        bgm.play().then(() => {
+          musicIcon.textContent = '🎶';
+          isPlaying = true;
+        }).catch(() => {
+          alert('Klik di mana saja untuk menyalakan musik!');
+        });
+      }
+    }
+
+    // Play Pop Sound Effect via Web Audio API
+    function playPopSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(450 + Math.random() * 300, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.1);
+      } catch (e) {}
+    }
+
+    // Create Floating Hearts in Background
+    function createBackgroundHearts() {
+      const container = document.getElementById('heart-bg-container');
+      const heartEmojis = ['💖', '✨', '🎈', '🎉', '🌸', '🎂'];
+      
+      for (let i = 0; i < 22; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'bg-heart text-2xl';
+        heart.innerText = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (5 + Math.random() * 5) + 's';
+        heart.style.animationDelay = (Math.random() * 5) + 's';
+        heart.style.fontSize = (18 + Math.random() * 24) + 'px';
+        container.appendChild(heart);
+      }
+    }
+    createBackgroundHearts();
+
+    // Logic Tombol "TIDAK" Menghindar & "TERIMA" Membesar
+    const btnTidak = document.getElementById('btn-tidak');
+    const btnTerima = document.getElementById('btn-terima');
+
+    function moveTidakButton() {
+      playPopSound();
+      rejectCount++;
+
+      // Make "TERIMA" button grow larger each time "TIDAK" is evaded
+      acceptScale += 0.15;
+      gsap.to(btnTerima, {
+        scale: acceptScale,
+        duration: 0.3,
+        ease: "back.out(1.7)"
+      });
+
+      // Calculate random absolute coordinates within screen bounds
+      const padding = 70;
+      const maxX = window.innerWidth - btnTidak.offsetWidth - padding;
+      const maxY = window.innerHeight - btnTidak.offsetHeight - padding;
+
+      const randomX = Math.max(padding, Math.random() * maxX);
+      const randomY = Math.max(padding, Math.random() * maxY);
+
+      btnTidak.style.position = 'fixed';
+      btnTidak.style.zIndex = '50';
+      
+      gsap.to(btnTidak, {
+        x: randomX - btnTidak.offsetLeft,
+        y: randomY - btnTidak.offsetTop,
+        duration: 0.2,
+        ease: "power2.out"
+      });
+    }
+
+    // Hover, Touch & Click Events for Evading
+    btnTidak.addEventListener('mouseenter', moveTidakButton);
+    btnTidak.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      moveTidakButton();
+    });
+    btnTidak.addEventListener('click', (e) => {
+      e.preventDefault();
+      moveTidakButton();
+    });
+
+    // Auto-play music on first user touch/click
+    document.body.addEventListener('click', () => {
+      if (!isPlaying) {
+        bgm.play().then(() => {
+          document.getElementById('music-icon').textContent = '🎶';
+          isPlaying = true;
+        }).catch(() => {});
+      }
+    }, { once: true });
+
+    // Function when clicking "TERIMA"
+    function acceptGift() {
+      // 1. Confetti Animation
+      const duration = 4 * 1000;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        confetti({
+          particleCount: 8,
+          angle: 60,
+          spread: 60,
+          origin: { x: 0 },
+          colors: ['#F47DB0', '#1DA0D7', '#F8F6E6', '#FFD166', '#06D6A0']
+        });
+        confetti({
+          particleCount: 8,
+          angle: 120,
+          spread: 60,
+          origin: { x: 1 },
+          colors: ['#F47DB0', '#1DA0D7', '#F8F6E6', '#FFD166', '#06D6A0']
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      })();
+
+      confetti({
+        particleCount: 100,
+        spread: 120,
+        origin: { y: 0.6 },
+        colors: ['#F47DB0', '#1DA0D7', '#FFFFFF']
+      });
+
+      // 2. Open Celebration Modal
+      const modal = document.getElementById('celebration-modal');
+      const modalContent = modal.querySelector('div');
+
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modalContent.classList.remove('scale-90');
+        modalContent.classList.add('scale-100');
+      }, 50);
+
+      if (!isPlaying) {
+        bgm.play().catch(() => {});
+      }
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('celebration-modal');
+      modal.classList.add('opacity-0');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 500);
+    }
+
+    function shareJoy() {
+      const shareText = "Makasih hadiah ultahnya sayang! Happy Birthday Kiky! 🎉💖✨";
+      if (navigator.share) {
+        navigator.share({
+          title: 'Happy Birthday Kiky! 🎉',
+          text: shareText,
+          url: window.location.href,
+        }).catch(() => {});
+      } else {
+        const dummy = document.createElement('input');
+        document.body.appendChild(dummy);
+        dummy.value = shareText;
+        dummy.select();
+        document.execCommand('copy');
+        document.body.removeChild(dummy);
+        alert('Ucapan kebahagiaan telah disalin! 💖');
+      }
+    }
+  </script>
+</body>
+</html>
